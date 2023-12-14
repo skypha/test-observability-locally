@@ -29,9 +29,10 @@ services:
     image: postgres:14.5
     restart: always
     environment:
-        POSTGRES_PASSWORD: example
+      POSTGRES_USER: example
+      POSTGRES_PASSWORD: example
     healthcheck:
-      test: [“CMD-SHELL”, “pg_isready”]
+      test: ["CMD-SHELL", "pg_isready"]
       interval: 1s
       timeout: 5s
       retries: 10
@@ -106,7 +107,7 @@ services:
       - ./logs/hello-observability.log:/tmp/hello-observability.log
       - ./logs/access_log.log:/tmp/access_log.log
     entrypoint:
-      - /bin/agent
+      - /bin/grafana-agent
       - -config.file=/etc/agent-config/agent.yaml
       - -metrics.wal-directory=/tmp/agent/wal
       - -enable-features=integrations-next
