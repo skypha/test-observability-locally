@@ -2,28 +2,41 @@ version: "3"
 services:
 
   # The hello-observability application
-  hello-observability:
-    image: hello-observability
-    volumes:
-      # Log files. They are all also accessible to the agent container,
-      # through docker volume mount
-      - ./logs/hello-observability.log:/tmp/hello-observability.log
-      - ./logs/access_log.log:/tmp/access_log.log
-    environment:
-      # Tracing configuration
-      JAVA_TOOL_OPTIONS: -javaagent:./opentelemetry-javaagent.jar    
-      OTEL_EXPORTER_OTLP_TRACES_ENDPOINT: http://tempo:4317
-      OTEL_SERVICE_NAME: hello-observability
-      OTEL_TRACES_EXPORTER: otlp
-    ports:
-      - "8080:8080"
+  # hello-observability:
+  #   image: hello-observability
+  #   volumes:
+  #     # Log files. They are all also accessible to the agent container,
+  #     # through docker volume mount
+  #     - ./logs/hello-observability.log:/tmp/hello-observability.log
+  #     - ./logs/access_log.log:/tmp/access_log.log
+  #   environment:
+  #     # Tracing configuration
+  #     JAVA_TOOL_OPTIONS: -javaagent:./opentelemetry-javaagent.jar    
+  #     OTEL_EXPORTER_OTLP_TRACES_ENDPOINT: http://tempo:4317
+  #     OTEL_SERVICE_NAME: hello-observability
+  #     OTEL_TRACES_EXPORTER: otlp
+  #   ports:
+  #     - "8080:8080"
 
   # Our load generator
-  load-generator:
-    image: curlimages/curl:latest
-    volumes:
-      - ../hello-observability/load-generator.sh:/tmp/load-generator.sh
-    command: /bin/sh -c "/tmp/load-generator.sh"
+  # load-generator:
+  #   image: curlimages/curl:latest
+  #   volumes:
+  #     - ../hello-observability/load-generator.sh:/tmp/load-generator.sh
+  #   command: /bin/sh -c "/tmp/load-generator.sh"
+
+  postgres:
+    image: postgres:14.5
+    restart: always
+    environment:
+        POSTGRES_PASSWORD: example
+    healthcheck:
+      test: [“CMD-SHELL”, “pg_isready”]
+      interval: 1s
+      timeout: 5s
+      retries: 10
+    ports:
+      - "5432:5432"
   
   loki:
     image: grafana/loki:latest
@@ -101,7 +114,7 @@ services:
       - -config.enable-read-api
     environment:
       HOSTNAME: agent
-#      REMOTE_WRITE_HOST: cortex:9009
+      POSTGRES_HOST: postgres:5432
       LOKI_HOST: loki:3100
       TEMPO_HOST: tempo:3200
     ports:
