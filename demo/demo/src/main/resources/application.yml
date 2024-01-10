@@ -1,4 +1,7 @@
 spring:
+  profiles.default: local
+  application:
+    name: Test-Observability
   datasource:
     url: jdbc:postgresql://localhost:5432/example
     username: example
@@ -9,3 +12,25 @@ spring:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
+
+management:
+  server:
+    port: 8081
+  endpoints:
+    enabled-by-default: true
+    web:
+      exposure:
+        include: health, prometheus
+      base-path: "/"
+      path-mapping:
+        prometheus: "metrics"
+  metrics:
+    tags:
+      application: test-observability-service
+  tracing.sampling.probability: 1.0
+
+# For Exemplars to work we need histogram buckets
+management.metrics.distribution.percentiles-histogram.http.server.requests: true
+
+# traceID and spanId are predefined MDC keys - we want the logs to include them
+logging.pattern.level: "%5p [${spring.application.name:},%X{traceId:-},%X{spanId:-}]"
