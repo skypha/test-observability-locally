@@ -5,12 +5,6 @@ To just see the application in action, you can build a jar file and run it from 
 
 Similarly, you can access the application here: http://localhost:8080/hello
 
-You can stop the docker container using:
-
-```
-docker stop hello-observability
-```
-
 **Note** that when you run the application either using the Jar file or directly with docker, nothing will be collected. You will need start all services using `docker-compose`, either all locally or connect to Grafana Cloud, to generate and collect logs, metrics and traces.
 
 ## Running everything locally
