@@ -1,28 +1,8 @@
 # Hello Observability
-Simple [Spring Boot](https://spring.io/guides/gs/spring-boot) application to demonstrate collecting and correlating logs, metrics and traces with [Prometheus](https://prometheus.io/), [OpenTelemetry](https://opentelemetry.io/), and [Grafana Cloud](https://grafana.com/products/cloud/). It is built using [Maven](https://spring.io/guides/gs/maven/). 
-
-Refer to this [documentation](https://docs.google.com/document/d/1uU9BbLH3OrBRLPAOQyQ5W2MeeTup5F2m2x1Qs4QGsnA/edit?usp=sharing) for details.
+Simple [Spring Boot](https://spring.io/guides/gs/spring-boot) application to demonstrate collecting and correlating logs, metrics and traces with [Prometheus](https://prometheus.io/), [OpenTelemetry](https://opentelemetry.io/), and [Grafana](https://grafana.com/).
 
 To just see the application in action, you can build a jar file and run it from the command line.
 
-```
-git clone https://github.com/adamquan/hello-observability.git
-cd hello-observability/hello-observability
-./mvnw package
-java -jar target/*.jar
-```
-
-You can then access Hello Observability here: http://localhost:8080/hello. Very simple application!
-
-<img alt="hello-observability" src="./images/hello-observability.png" width="300">
-
-Or you can run it using Docker:
-
-```
-cd hello-observability/hello-observability
-docker build -t hello-observability .
-docker run -d -p 8080:8080 --name hello-observability hello-observability
-```
 Similarly, you can access the application here: http://localhost:8080/hello
 
 You can stop the docker container using:
