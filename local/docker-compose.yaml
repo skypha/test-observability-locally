@@ -12,11 +12,11 @@ services:
         timeout: 5s
         retries: 10
       ports:
-        - "5432:5432"
+        - 5432:5432
   
     prometheus:
         container_name: prometheus
-        image: prom/prometheus
+        image: prom/prometheus:v2.48.1
         extra_hosts: ['host.docker.internal:host-gateway']
         command:
             - --enable-feature=exemplar-storage
